@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.18.13 (2022-01-19)
+
+**Note:** Version bump only for package @pewriebontal/gatsby-theme-novela
+
+
+
+
+
 ## 0.18.12 (2022-01-19)
 
 **Note:** Version bump only for package @pewriebontal/gatsby-theme-novela
