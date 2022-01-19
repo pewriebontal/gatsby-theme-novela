@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.18.12 (2022-01-19)
+
+**Note:** Version bump only for package @pewriebontal/gatsby-theme-novela
+
+
+
+
+
+## 0.18.11 (2022-01-19)
+
+### Refactor
+
+* Change org name for npm.
+
+
 ## [0.18.7](https://github.com/narative/gatsby-theme-novela/compare/@narative/gatsby-theme-novela@0.18.6...@narative/gatsby-theme-novela@0.18.7) (2021-03-24)
 
 

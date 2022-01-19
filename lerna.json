@@ -1,7 +1,7 @@
 {
   "useWorkspaces": true,
   "packages": [
-    "@narative/gatsby-theme-novela"
+    "@pewriebontal/gatsby-theme-novela"
   ],
   "npmClient": "npm",
   "command": {
@@ -9,6 +9,7 @@
       "allowBranch": ["master"],
       "ignoreChanges": ["ignored-file", "*.md"],
       "message": "chore(release): publish",
+      "registry": "http://registry.npmjs.org",
       "yes": true
     },
     "bootstrap": {

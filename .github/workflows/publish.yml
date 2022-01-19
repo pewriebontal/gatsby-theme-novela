@@ -17,8 +17,8 @@ jobs:
         fetch-depth: "0"
     - name: Git Identity
       run: |
-        git config --global user.name '@jpvalery'
-        git config --global user.email 'jpvalery@users.noreply.github.com'
+        git config --global user.name '@pewriebontal'
+        git config --global user.email 'pewriebontal@users.noreply.github.com'
         git remote set-url origin https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -30,19 +30,19 @@ jobs:
     - name: Pulling
       run: git pull
     - name: Install dependencies
-      run: yarn install --pure-lockfile
+      run: npm install --pure-lockfile
     - name: Build
-      run: yarn build
+      run: npm run build
     - name: Authenticate with Registry
       run: |
-          yarn logout
-          echo "registry=http://registry.npmjs.org/" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+          if [[ -f ~/.npmrc ]]; then rm ~/.npmrc; fi
+          echo "registry=http://registry.npmjs.org/" >> ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
           npm whoami
       env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Publish with Lerna
-      run: yarn lerna publish --yes --message 'chore(release)'
+      run: npm run publish
       env:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

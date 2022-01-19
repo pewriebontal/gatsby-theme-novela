@@ -11,9 +11,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Yarn Install
-      run: yarn install
-    - name: Yarn Lint
-      run: yarn lint
-    - name: Yarn Build
-      run: yarn build
+    - name: Npm Install
+      run: npm install
+    - name: Npm Lint
+      run: npm lint
+    - name: Npm Build
+      run: npm build
