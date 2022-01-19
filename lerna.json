@@ -3,7 +3,7 @@
   "packages": [
     "@narative/gatsby-theme-novela"
   ],
-  "npmClient": "yarn",
+  "npmClient": "npm",
   "command": {
     "publish": {
       "allowBranch": ["master"],

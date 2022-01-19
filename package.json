@@ -5,12 +5,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "yarn workspace www build",
-    "dev": "yarn start",
+    "build": "npm run build --workspace www",
+    "dev": "npm run start",
     "lint": "eslint --ignore-path .gitignore .",
-    "start": "yarn workspace www develop",
-    "bootstrap": "yarn lerna bootstrap",
-    "publish": "yarn lerna version && yarn lerna publish"
+    "start": "npm run develop --workspace www",
+    "bootstrap": "lerna bootstrap",
+    "publish": "lerna version && lerna publish"
   },
   "workspaces": [
     "@narative/gatsby-theme-novela",
@@ -56,7 +56,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint",
+      "pre-commit": "npm run lint",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
