@@ -23,7 +23,7 @@ interface MenuFloatState {
  * Values we get to be able to ensure the positionting context are correct!
  * Padding is derviced from the CSS value in Editor
  */
-const MENU_WIDTH: number = 225;
+const MENU_WIDTH: number = 230;
 const MENU_HEIGHT: number = 46;
 
 const ArticleShare: React.FC<{}> = () => {
