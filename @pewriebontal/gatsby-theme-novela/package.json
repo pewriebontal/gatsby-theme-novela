@@ -2,7 +2,7 @@
   "name": "@pewriebontal/gatsby-theme-novela",
   "author": "hello@pewriebontal.ml",
   "repository": "https://github.com/pewriebontal/gatsby-theme-novela",
-  "version": "0.18.12",
+  "version": "0.18.13",
   "main": "index.js",
   "license": "MIT",
   "keywords": [
