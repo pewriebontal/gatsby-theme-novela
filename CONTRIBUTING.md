@@ -2,20 +2,20 @@
 
 ### Setting Up Your Local Dev Environment
 
-This project uses [Yarn Workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) so you can run the Novela locally with an example site.
+This project uses [NPM Workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces) so you can run the Novela locally with an example site.
 
 ```sh
   git clone git@github.com:narative/gatsby-theme-novela.git
 
   cd gatsby-theme-novela
 
-  yarn
+  npm install
 ```
 
 Once you've downloaded the repository and installed all the dependencies you can run the project locally.
 
 ```sh
-  yarn start
+  npm run start
 ```
 
 #### Adding features and modifying the theme
