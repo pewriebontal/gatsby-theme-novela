@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.18.22](https://github.com/pewriebontal/gatsby-theme-novela/compare/@pewriebontal/gatsby-theme-novela@0.18.14...@pewriebontal/gatsby-theme-novela@0.18.22) (2022-02-08)
+
+**Note:** Version bump only for package @pewriebontal/gatsby-theme-novela
+
+
+
+
+
 ## 0.18.21 (2022-02-08)
 
 ### Docs
