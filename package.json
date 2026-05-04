@@ -10,25 +10,25 @@
     "lint": "eslint --ignore-path .gitignore .",
     "start": "NODE_OPTIONS=--openssl-legacy-provider npm run develop --workspace www",
     "bootstrap": "lerna bootstrap",
-    "publish": "lerna version && lerna publish"
+    "publish": "lerna version && lerna publish",
+    "prepare": "husky"
   },
   "workspaces": [
     "@pewriebontal/gatsby-theme-novela",
     "www"
   ],
   "devDependencies": {
-    "@commitlint/cli": "^8.1.0",
-    "@commitlint/config-conventional": "^8.1.0",
-    "@commitlint/travis-cli": "^8.1.0",
-    "eslint": "^6.2.2",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.1.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.0",
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^3.4.1",
     "eslint-plugin-unicorn": "^10.0.0",
-    "husky": "^3.0.4",
-    "lerna": "^6.6.2",
-    "prettier": "^1.18.2"
+    "husky": "^9.1.7",
+    "lerna": "^9.0.7",
+    "prettier": "^2.8.8"
   },
   "eslintConfig": {
     "extends": [
@@ -43,6 +43,12 @@
     "plugins": [],
     "rules": {
       "unicorn/no-abusive-eslint-disable": 0,
+      "unicorn/prefer-module": 0,
+      "unicorn/no-empty-file": 0,
+      "unicorn/no-array-callback-reference": 0,
+      "unicorn/prefer-includes": 0,
+      "unicorn/consistent-function-scoping": 0,
+      "no-restricted-syntax": 0,
       "unicorn/filename-case": [
         "error",
         {
@@ -54,11 +60,8 @@
       ]
     }
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
+  "engines": {
+    "node": ">=18"
   },
   "prettier": {
     "singleQuote": true,

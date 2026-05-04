@@ -26,23 +26,26 @@ module.exports = ({ node, actions, getNode, createNodeId }, themeOptions) => {
       slug,
     };
 
-    const permalink = articlePermalinkFormat.replace(/(:[a-z_]+)/g, match => {
-      const key = match.substr(1);
-      if (permalinkData.hasOwnProperty(key)) {
-        return permalinkData[key];
-      }
-      throw new Error(`
+    const permalink = articlePermalinkFormat.replaceAll(
+      /(:[_a-z]+)/g,
+      (match) => {
+        const key = match.slice(1);
+        if (permalinkData.hasOwnProperty(key)) {
+          return permalinkData[key];
+        }
+        throw new Error(`
           We could not find the value for: "${key}".
           Please verify the articlePermalinkFormat format in theme options.
           https://github.com/narative/gatsby-theme-novela#theme-options
         `);
-    });
+      },
+    );
 
     return permalink;
   }
 
   function generateSlug(...arguments_) {
-    return `/${arguments_.join('/')}`.replace(/\/\/+/g, '/');
+    return `/${arguments_.join('/')}`.replaceAll(/\/\/+/g, '/');
   }
 
   // ///////////////////////////////////////////////////////
