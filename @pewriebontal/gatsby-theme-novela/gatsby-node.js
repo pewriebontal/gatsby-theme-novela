@@ -1,4 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
+require('events').EventEmitter.defaultMaxListeners = 20;
+
 exports.createPages = require('@pewriebontal/gatsby-theme-novela/src/gatsby/node/createPages');
 exports.createResolvers = require('@pewriebontal/gatsby-theme-novela/src/gatsby/node/createResolvers');
 exports.onCreateNode = require('@pewriebontal/gatsby-theme-novela/src/gatsby/node/onCreateNode');
