@@ -5,10 +5,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "npm run build --workspace www",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider npm run build --workspace www",
     "dev": "npm run start",
     "lint": "eslint --ignore-path .gitignore .",
-    "start": "npm run develop --workspace www",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider npm run develop --workspace www",
     "bootstrap": "lerna bootstrap",
     "publish": "lerna version && lerna publish"
   },
@@ -63,5 +63,9 @@
   "prettier": {
     "singleQuote": true,
     "trailingComma": "all"
+  },
+  "dependencies": {
+    "gatsby-plugin-sharp": "^2.14.4",
+    "gatsby-transformer-remark": "^2.16.1"
   }
 }

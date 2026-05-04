@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "npm run clean && gatsby build",
-    "develop": "npm run clean && gatsby develop",
+    "develop": "npm run clean && mkdir -p .cache && gatsby develop",
     "clean": "gatsby clean"
   },
   "dependencies": {
