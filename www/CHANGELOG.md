@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.22](https://github.com/pewriebontal/gatsby-theme-novela/compare/www@1.6.21...www@1.6.22) (2022-12-08)
+
+**Note:** Version bump only for package www
+
+
+
+
+
+## [1.6.21](https://github.com/pewriebontal/gatsby-theme-novela/compare/www@1.6.20...www@1.6.21) (2022-12-06)
+
+**Note:** Version bump only for package www
+
+
+
+
+
+## [1.6.20](https://github.com/pewriebontal/gatsby-theme-novela/compare/www@1.6.19...www@1.6.20) (2022-02-08)
+
+**Note:** Version bump only for package www
+
+
+
+
+
 ## [1.6.19](https://github.com/pewriebontal/gatsby-theme-novela/compare/www@1.6.18...www@1.6.19) (2022-01-23)
 
 **Note:** Version bump only for package www

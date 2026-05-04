@@ -5,7 +5,7 @@ require('dotenv').config();
 const log = (message, section) =>
   console.log(`\n\u001B[36m${message} \u001B[4m${section}\u001B[0m\u001B[0m\n`);
 
-const path = require('path');
+const path = require('node:path');
 const createPaginatedPages = require('gatsby-paginate');
 
 const templatesDirectory = path.resolve(__dirname, '../../templates');
@@ -31,15 +31,15 @@ function slugify(string, base) {
   const slug = string
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[\u0300-\u036F]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)+/g, '');
+    .replaceAll(/[\u0300-\u036F]/g, '')
+    .replaceAll(/[^\da-z]+/g, '-')
+    .replaceAll(/(^-|-$)+/g, '');
 
-  return `${base}/${slug}`.replace(/\/\/+/g, '/');
+  return `${base}/${slug}`.replaceAll(/\/\/+/g, '/');
 }
 
 function getUniqueListBy(array, key) {
-  return [...new Map(array.map(item => [item[key], item])).values()];
+  return [...new Map(array.map((item) => [item[key], item])).values()];
 }
 
 const byDate = (a, b) => new Date(b.dateForSEO) - new Date(a.dateForSEO);
@@ -117,9 +117,10 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
         normalize.contentful.authors,
       );
 
-      dataSources.contentful.articles = contentfulArticles.data.articles.edges.map(
-        normalize.contentful.articles,
-      );
+      dataSources.contentful.articles =
+        contentfulArticles.data.articles.edges.map(
+          normalize.contentful.articles,
+        );
     } catch (error) {
       console.error(error);
     }
@@ -132,7 +133,7 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
     ...dataSources.netlify.articles,
   ].sort(byDate);
 
-  const articlesThatArentSecret = articles.filter(article => !article.secret);
+  const articlesThatArentSecret = articles.filter((article) => !article.secret);
 
   // Combining together all the authors from different sources
   authors = getUniqueListBy(
@@ -181,16 +182,16 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
    * To do this, we need to find the corresponding authors since we allow for co-authors.
    */
   log('Creating', 'article posts');
-  articles.forEach((article, index) => {
+  for (const [index, article] of articles.entries()) {
     // Match the Author to the one specified in the article
     let authorsThatWroteTheArticle;
     try {
-      authorsThatWroteTheArticle = authors.filter(author => {
+      authorsThatWroteTheArticle = authors.filter((author) => {
         const allAuthors = article.author
           .split(',')
-          .map(a => a.trim().toLowerCase());
+          .map((a) => a.trim().toLowerCase());
 
-        return allAuthors.some(a => a === author.name.toLowerCase());
+        return allAuthors.some((a) => a === author.name.toLowerCase());
       });
     } catch (error) {
       throw new Error(`
@@ -230,7 +231,7 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
         next,
       },
     });
-  });
+  }
 
   /**
    * By default the author's page is not enabled. This can be enabled through the theme options.
@@ -239,9 +240,9 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
   if (authorsPage) {
     log('Creating', 'authors page');
 
-    authors.forEach(author => {
+    for (const author of authors) {
       const articlesTheAuthorHasWritten = articlesThatArentSecret.filter(
-        article =>
+        (article) =>
           article.author.toLowerCase().includes(author.name.toLowerCase()),
       );
       const path = slugify(author.slug, authorsPath);
@@ -260,6 +261,6 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
           limit: pageLength,
         },
       });
-    });
+    }
   }
 };
