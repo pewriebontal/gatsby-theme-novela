@@ -8,7 +8,7 @@
     "build": "NODE_OPTIONS=--openssl-legacy-provider npm run build --workspace www",
     "dev": "npm run start",
     "lint": "eslint --ignore-path .gitignore .",
-    "start": "NODE_OPTIONS=--openssl-legacy-provider npm run develop --workspace www",
+    "start": "NODE_OPTIONS='--openssl-legacy-provider --no-deprecation' npm run develop --workspace www",
     "bootstrap": "lerna bootstrap",
     "publish": "lerna version && lerna publish",
     "prepare": "husky"
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@commitlint/cli": "^20.5.3",
     "@commitlint/config-conventional": "^20.5.3",
-    "eslint": "^6.8.0",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.32.0",
@@ -28,6 +28,7 @@
     "eslint-plugin-unicorn": "^10.0.0",
     "husky": "^9.1.7",
     "lerna": "^9.0.7",
+    "postcss": "^8.5.14",
     "prettier": "^2.8.8"
   },
   "eslintConfig": {
@@ -68,7 +69,7 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "gatsby-plugin-sharp": "^2.14.4",
-    "gatsby-transformer-remark": "^2.16.1"
+    "gatsby-plugin-sharp": "^3.15.0",
+    "gatsby-transformer-remark": "^4.12.0"
   }
 }

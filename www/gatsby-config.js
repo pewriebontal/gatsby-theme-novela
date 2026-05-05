@@ -52,6 +52,8 @@ const siteMetadata = {
 };
 
 const plugins = [
+  `gatsby-plugin-sharp`,
+  `gatsby-transformer-sharp`,
   {
     resolve: "@pewriebontal/gatsby-theme-novela",
     options: {

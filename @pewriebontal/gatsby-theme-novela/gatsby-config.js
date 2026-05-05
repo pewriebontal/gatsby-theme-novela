@@ -254,7 +254,7 @@ module.exports = ({
     {
       resolve: `gatsby-plugin-emotion`,
       options: {
-        autoLabel: process.env.NODE_ENV === `development`,
+        autoLabel: process.env.NODE_ENV === `development` ? `dev-only` : `never`,
       },
     },
   ],
