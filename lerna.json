@@ -1,7 +1,4 @@
 {
-  "packages": [
-    "@pewriebontal/gatsby-theme-novela"
-  ],
   "npmClient": "npm",
   "command": {
     "publish": {
