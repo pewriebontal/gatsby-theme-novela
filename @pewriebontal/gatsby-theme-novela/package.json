@@ -46,7 +46,6 @@
     "@mdx-js/mdx": "^1.1.0",
     "@mdx-js/react": "^1.0.27",
     "@raae/gatsby-remark-oembed": "^0.1.1",
-    "adm-zip": "^0.5.17",
     "contentful-cli": "^1.16.0",
     "gatsby": "^3.15.0",
     "gatsby-image": "^2.2.7",
@@ -80,7 +79,6 @@
     "react-medium-image-zoom": "^4.0.2",
     "react-outside-click-handler": "^1.2.4",
     "remark-slug": "^5.1.2",
-    "request": "^2.88.0",
     "slugify": "^1.6.9",
     "theme-ui": "^0.14.7",
     "typeface-merriweather": "^0.0.72"
