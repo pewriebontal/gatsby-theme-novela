@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0](https://github.com/pewriebontal/gatsby-theme-novela/compare/www@1.6.22...www@1.7.0) (2026-05-05)
+
+
+### Bug Fixes
+
+* resolve development environment startup and dependency issues ([3ce5a91](https://github.com/pewriebontal/gatsby-theme-novela/commit/3ce5a91995d9f3bb18bff27a08725ad768276696))
+* resolve missing react-error-overlay and max listeners warnings ([16199bd](https://github.com/pewriebontal/gatsby-theme-novela/commit/16199bdbc5df8e65b7f6a471c25725da0a1c7a80))
+
+
+
+
+
 ## [1.6.22](https://github.com/pewriebontal/gatsby-theme-novela/compare/www@1.6.21...www@1.6.22) (2022-12-08)
 
 **Note:** Version bump only for package www
