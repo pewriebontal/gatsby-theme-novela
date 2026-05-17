@@ -40,6 +40,8 @@ export interface IAuthor {
 export interface IArticle {
   slug: string;
   authors: IAuthor[];
+  title: string;
+  categories?: string[];
   excerpt: string;
   body: string;
   id: string;
