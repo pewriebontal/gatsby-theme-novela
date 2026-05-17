@@ -1,0 +1,19 @@
+name: CI for PR
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  CI_Workflow:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Npm Install
+      run: npm install
+    - name: Npm Lint
+      run: npm lint
+    - name: Npm Build
+      run: npm build

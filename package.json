@@ -5,31 +5,32 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "yarn workspace www build",
-    "clean": "yarn workspace www clean",
-    "dev": "yarn start",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider npm run build --workspace www",
+    "clean": "npm run clean --workspace www",
+    "dev": "npm run start",
     "lint": "eslint --ignore-path .gitignore .",
-    "start": "yarn workspace www develop",
-    "bootstrap": "yarn lerna bootstrap",
-    "publish": "yarn lerna version && yarn lerna publish"
+    "start": "NODE_OPTIONS='--openssl-legacy-provider --no-deprecation' npm run develop --workspace www",
+    "bootstrap": "lerna bootstrap",
+    "publish": "lerna version && lerna publish",
+    "prepare": "husky"
   },
   "workspaces": [
-    "@narative/gatsby-theme-novela",
+    "@pewriebontal/gatsby-theme-novela",
     "www"
   ],
   "devDependencies": {
-    "@commitlint/cli": "^8.1.0",
-    "@commitlint/config-conventional": "^8.1.0",
-    "@commitlint/travis-cli": "^8.1.0",
-    "eslint": "^6.2.2",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.1.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.0",
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^3.4.1",
     "eslint-plugin-unicorn": "^10.0.0",
-    "husky": "^3.0.4",
-    "lerna": "^3.16.4",
-    "prettier": "^1.18.2"
+    "husky": "^9.1.7",
+    "lerna": "^9.0.7",
+    "postcss": "^8.5.14",
+    "prettier": "^2.8.8"
   },
   "eslintConfig": {
     "extends": [
@@ -44,6 +45,12 @@
     "plugins": [],
     "rules": {
       "unicorn/no-abusive-eslint-disable": 0,
+      "unicorn/prefer-module": 0,
+      "unicorn/no-empty-file": 0,
+      "unicorn/no-array-callback-reference": 0,
+      "unicorn/prefer-includes": 0,
+      "unicorn/consistent-function-scoping": 0,
+      "no-restricted-syntax": 0,
       "unicorn/filename-case": [
         "error",
         {
@@ -55,14 +62,15 @@
       ]
     }
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
+  "engines": {
+    "node": ">=18"
   },
   "prettier": {
     "singleQuote": true,
     "trailingComma": "all"
+  },
+  "dependencies": {
+    "gatsby-plugin-sharp": "^3.15.0",
+    "gatsby-transformer-remark": "^4.12.0"
   }
 }

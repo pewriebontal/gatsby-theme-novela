@@ -31,15 +31,35 @@ const siteMetadata = {
     {
       url: `https://youtube.com`,
     },
+    {
+      name: 'stackoverflow',
+      url: `https://bit.ly/1x0885j`,
+    },
+    {
+      url: `https://digitalocean.com`,
+    },
+    {
+      url: `https://tripadvisor.com`,
+    },
+    {
+      url: `https://notion.so`,
+    },
+    {
+      name: `mailto`,
+      url: `mailto:`,
+    },
   ],
 };
 
 const plugins = [
+  `gatsby-plugin-sharp`,
+  `gatsby-transformer-sharp`,
   {
-    resolve: "@narative/gatsby-theme-novela",
+    resolve: "@pewriebontal/gatsby-theme-novela",
     options: {
       contentPosts: "content/posts",
       contentAuthors: "content/authors",
+      rootPath: "/",
       basePath: "/",
       authorsPage: true,
       mailchimp: true,
@@ -83,9 +103,9 @@ const plugins = [
  *
  * To enanble Contentful you must
  * 1. Create a new Space on contentful.com
- * 2. Import the Contentful Model from @narative/gatsby-theme-novela/conteful
+ * 2. Import the Contentful Model from @pewriebontal/gatsby-theme-novela/conteful
  * 3. Add .env to www/ (see www/env.example)
- * 4. Enable contentful as a source in this file for @narative/gatsby-theme-novela
+ * 4. Enable contentful as a source in this file for @pewriebontal/gatsby-theme-novela
  */
 if (process.env.CONTENTFUL_SPACE_ID && process.env.CONTENTFUL_ACCESS_TOKEN) {
   plugins.push({
