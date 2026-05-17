@@ -1,16 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
-import styled from "@emotion/styled";
-import throttle from "lodash/throttle";
-import { graphql, useStaticQuery } from "gatsby";
+import React, { useRef, useState, useEffect } from 'react';
+import styled from '@emotion/styled';
+import throttle from 'lodash/throttle';
+import { graphql, useStaticQuery } from 'gatsby';
 
-import Layout from "@components/Layout";
-import MDXRenderer from "@components/MDX";
-import Progress from "@components/Progress";
-import Section from "@components/Section";
-import Subscription from "@components/Subscription";
+import Layout from '@components/Layout';
+import MDXRenderer from '@components/MDX';
+import Progress from '@components/Progress';
+import Section from '@components/Section';
+import Subscription from '@components/Subscription';
 
-import mediaqueries from "@styles/media";
-import { debounce } from "@utils";
+import mediaqueries from '@styles/media';
+import { debounce } from '@utils';
 
 import ArticleAside from "../sections/article/Article.Aside";
 import ArticleHero from "../sections/article/Article.Hero";
@@ -45,7 +45,7 @@ const Article: Template = ({ pageContext, location }) => {
   const results = useStaticQuery(siteQuery);
   const name = results.allSite.edges[0].node.siteMetadata.name;
 
-  const { article, authors, next } = pageContext;
+  const { article, authors, next, categories } = pageContext;
 
   useEffect(() => {
     const calculateBodySize = throttle(() => {
@@ -60,7 +60,7 @@ const Article: Template = ({ pageContext, location }) => {
        */
       if (!hasCalculated) {
         const debouncedCalculation = debounce(calculateBodySize);
-        const $imgs = contentSection.querySelectorAll("img");
+        const $imgs = contentSection.querySelectorAll('img');
 
         $imgs.forEach($img => {
           // If the image hasn't finished loading then add a listener
@@ -76,15 +76,19 @@ const Article: Template = ({ pageContext, location }) => {
     }, 20);
 
     calculateBodySize();
-    window.addEventListener("resize", calculateBodySize);
+    window.addEventListener('resize', calculateBodySize);
 
-    return () => window.removeEventListener("resize", calculateBodySize);
+    return () => window.removeEventListener('resize', calculateBodySize);
   }, []);
 
   return (
     <Layout>
       <ArticleSEO article={article} authors={authors} location={location} />
-      <ArticleHero article={article} authors={authors} />
+      <ArticleHero
+        article={article}
+        authors={authors}
+        categories={categories}
+      />
       <ArticleAside contentHeight={contentHeight}>
         <Progress contentHeight={contentHeight} />
       </ArticleAside>
@@ -130,7 +134,7 @@ const ArticleBody = styled.article`
   ${mediaqueries.desktop`
     padding-left: 53px;
   `}
-  
+
   ${mediaqueries.tablet`
     padding: 70px 0 80px;
   `}

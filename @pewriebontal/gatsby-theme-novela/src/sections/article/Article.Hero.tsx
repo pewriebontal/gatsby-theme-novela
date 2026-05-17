@@ -8,13 +8,15 @@ import mediaqueries from '@styles/media';
 import { IArticle, IAuthor } from '@types';
 
 import ArticleAuthors from './Article.Authors';
+import ArticleCategories from './Article.Categories';
 
 interface ArticleHeroProps {
   article: IArticle;
   authors: IAuthor[];
+  categories?: string[];
 }
 
-const ArticleHero: React.FC<ArticleHeroProps> = ({ article, authors }) => {
+const ArticleHero: React.FC<ArticleHeroProps> = ({ article, authors, categories }) => {
   const hasCoAUthors = authors.length > 1;
   const hasHeroImage =
     article.hero &&
@@ -27,6 +29,7 @@ const ArticleHero: React.FC<ArticleHeroProps> = ({ article, authors }) => {
         <HeroHeading>{article.title}</HeroHeading>
         <HeroSubtitle hasCoAUthors={hasCoAUthors}>
           <ArticleAuthors authors={authors} />
+          <ArticleCategories categories={categories} />
           <ArticleMeta hasCoAUthors={hasCoAUthors}>
             {article.date} · {article.timeToRead} min read
           </ArticleMeta>
@@ -86,11 +89,11 @@ const Header = styled.header`
   z-index: 10;
   margin:100px auto 120px;
   padding-left: 68px;
-  max-width: 749px;
+  max-width: 944px;
 
   ${mediaqueries.desktop`
     padding-left: 53px;
-    max-width: calc(507px + 53px);
+    max-width: calc(944px + 53px);
     margin: 100px auto 70px;
   `}
 
@@ -116,6 +119,7 @@ const HeroHeading = styled(Headings.h1)`
   margin-bottom: 25px;
   font-weight: bold;
   line-height: 1.32;
+  max-width: 749px;
 
   ${mediaqueries.tablet`
     margin-bottom: 20px;
@@ -130,12 +134,16 @@ const HeroHeading = styled(Headings.h1)`
 const HeroSubtitle = styled.div<{ hasCoAUthors: boolean }>`
   position: relative;
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 12px;
   font-size: 18px;
   color: ${p => p.theme.colors.grey};
 
   ${p => mediaqueries.phablet`
     font-size: 14px;
     flex-direction: column;
+    align-items: stretch;
 
     ${p.hasCoAUthors &&
       `
@@ -149,6 +157,7 @@ const HeroSubtitle = styled.div<{ hasCoAUthors: boolean }>`
           border: 1px solid ${p.theme.colors.horizontalRule};
           opacity: 0.5;
           border-radius: 5px;
+          pointer-events: none;
         }
     `}
 
