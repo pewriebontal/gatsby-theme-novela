@@ -105,6 +105,13 @@ const ListItem: React.FC<ArticlesListItemProps> = ({ article, narrow }) => {
           {hasHeroImage ? <Image src={imageSource} /> : <ImagePlaceholder />}
         </ImageContainer>
         <div>
+          {article.categories && article.categories.length > 0 && (
+            <CategoryLine>
+              {article.categories.slice(0, 2).map((category) => (
+                <CategoryName key={category}>{category}</CategoryName>
+              ))}
+            </CategoryLine>
+          )}
           <Title dark hasOverflow={hasOverflow} gridLayout={gridLayout}>
             {article.title}
           </Title>
@@ -385,4 +392,21 @@ const ArticleLink = styled(Link)`
       transform: scale(0.97) translateY(3px);
     }
   `}
+`;
+
+const CategoryLine = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+`;
+
+const CategoryName = styled.span`
+  color: ${p => p.theme.colors.grey};
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  opacity: 0.55;
 `;
