@@ -14,6 +14,7 @@ const templates = {
   article: path.resolve(templatesDirectory, 'article.template.tsx'),
   author: path.resolve(templatesDirectory, 'author.template.tsx'),
   category: path.resolve(templatesDirectory, 'category.template.tsx'),
+  search: path.resolve(templatesDirectory, 'search.template.tsx'),
 };
 
 const query = require('../data/data.query');
@@ -45,6 +46,51 @@ function getUniqueListBy(array, key) {
 
 const byDate = (a, b) => new Date(b.dateForSEO) - new Date(a.dateForSEO);
 
+function normalizePath(pathname) {
+  return (
+    `/${pathname || ''}`.replaceAll(/\/\/+/g, '/').replace(/\/$/, '') || '/'
+  );
+}
+
+function buildSearchPath(searchPath, basePath) {
+  if (searchPath) return normalizePath(searchPath);
+
+  const normalizedBasePath = normalizePath(basePath || '/');
+  return normalizedBasePath === '/'
+    ? '/search'
+    : normalizePath(`${normalizedBasePath}/search`);
+}
+
+function normalizeSearchText(value = '') {
+  return String(value || '')
+    .replaceAll(/```[\s\S]*?```/g, ' ')
+    .replaceAll(/`([^`]+)`/g, '$1')
+    .replaceAll(/!\[[^\]]*]\([^)]+\)/g, ' ')
+    .replaceAll(/\[([^\]]+)]\([^)]+\)/g, '$1')
+    .replaceAll(/<[^>]+>/g, ' ')
+    .replaceAll(/[>#*_~|]/g, ' ')
+    .replaceAll(/\s+/g, ' ')
+    .trim();
+}
+
+function buildSearchIndex(articles) {
+  return articles.map((article) => ({
+    id: article.id,
+    title: article.title,
+    slug: article.slug,
+    excerpt: normalizeSearchText(article.excerpt),
+    author: article.author || '',
+    categories: article.categories || [],
+    date: article.date,
+    timeToRead: article.timeToRead,
+    hero: {
+      regular: article.hero && article.hero.regular,
+      narrow: article.hero && article.hero.narrow,
+    },
+    body: normalizeSearchText(article.body).slice(0, 8000),
+  }));
+}
+
 // ///////////////////////////////////////////////////////
 
 module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
@@ -57,6 +103,8 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
     pageLength = 6,
     sources = {},
     mailchimp = '',
+    search = true,
+    searchPath,
   } = themeOptions;
 
   const { data } = await graphql(`
@@ -136,6 +184,7 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
   ].sort(byDate);
 
   const articlesThatArentSecret = articles.filter((article) => !article.secret);
+  const resolvedSearchPath = buildSearchPath(searchPath, basePath);
 
   // Combining together all the authors from different sources
   authors = getUniqueListBy(
@@ -190,6 +239,19 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
       limit: pageLength,
     },
   });
+
+  if (search) {
+    log('Creating', 'search page');
+    createPage({
+      path: resolvedSearchPath,
+      component: templates.search,
+      context: {
+        basePath,
+        searchPath: resolvedSearchPath,
+        searchIndex: buildSearchIndex(articlesThatArentSecret),
+      },
+    });
+  }
 
   /**
    * Once the list of articles have bene created, we need to make individual article posts.
