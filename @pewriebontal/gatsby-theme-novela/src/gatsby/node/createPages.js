@@ -6,6 +6,7 @@ const log = (message, section) =>
   console.log(`\n\u001B[36m${message} \u001B[4m${section}\u001B[0m\u001B[0m\n`);
 
 const path = require('node:path');
+const fs = require('node:fs');
 const createPaginatedPages = require('gatsby-paginate');
 
 const templatesDirectory = path.resolve(__dirname, '../../templates');
@@ -242,13 +243,22 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
 
   if (search) {
     log('Creating', 'search page');
+    const searchIndex = buildSearchIndex(articlesThatArentSecret);
+    const publicPath = path.join(process.cwd(), 'public');
+    if (!fs.existsSync(publicPath)) {
+      fs.mkdirSync(publicPath, { recursive: true });
+    }
+    fs.writeFileSync(
+      path.join(publicPath, 'search-index.json'),
+      JSON.stringify(searchIndex),
+    );
+
     createPage({
       path: resolvedSearchPath,
       component: templates.search,
       context: {
         basePath,
         searchPath: resolvedSearchPath,
-        searchIndex: buildSearchIndex(articlesThatArentSecret),
       },
     });
   }

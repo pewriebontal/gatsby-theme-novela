@@ -40,7 +40,9 @@ export interface IAuthor {
 export interface IArticle {
   slug: string;
   authors: IAuthor[];
-  excerpt: string;
+  title: string | React.ReactNode;
+  categories?: string[];
+  excerpt: string | React.ReactNode;
   body: string;
   id: string;
   hero: {

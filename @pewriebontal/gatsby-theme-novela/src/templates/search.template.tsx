@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from '@emotion/styled';
 import Fuse from 'fuse.js';
 
@@ -10,26 +10,26 @@ import Icons from '@icons';
 import mediaqueries from '@styles/media';
 import ArticlesList from '../sections/articles/Articles.List';
 
+import { IArticle } from '@types';
+
 interface SearchItem {
   author: string;
   body: string;
   categories: string[];
   date: string;
-  excerpt: string;
-  hero?: {
-    narrow?: Record<string, unknown>;
-    regular?: Record<string, unknown>;
-  };
+  excerpt: string | React.ReactNode;
+  hero?: IArticle['hero'];
   id: string;
   slug: string;
   timeToRead?: number;
-  title: string;
+  title: string | React.ReactNode;
 }
 
 interface SearchTemplateProps {
   location: Location;
   pageContext: {
-    searchIndex: SearchItem[];
+    basePath: string;
+    searchPath: string;
   };
 }
 
@@ -40,6 +40,7 @@ const fuseOptions = {
   ignoreLocation: true,
   minMatchCharLength: MIN_QUERY_LENGTH,
   threshold: 0.35,
+  includeMatches: true,
   keys: [
     { name: 'title', weight: 0.4 },
     { name: 'excerpt', weight: 0.25 },
@@ -54,25 +55,70 @@ function getInitialQuery(location: Location) {
   return new URLSearchParams(location.search).get('q') || '';
 }
 
+const highlightMatches = (text: string, matches: readonly Fuse.FuseResultMatch[] = [], key: string) => {
+  const match = matches.find((m) => m.key === key);
+  if (!match || !match.indices || match.indices.length === 0) return text;
+
+  let result: React.ReactNode[] = [];
+  let lastIndex = 0;
+
+  match.indices.forEach(([start, end], i) => {
+    if (start > lastIndex) {
+      result.push(text.slice(lastIndex, start));
+    }
+    result.push(
+      <mark key={`${key}-${i}`} style={{ backgroundColor: 'rgba(255, 225, 0, 0.4)', color: 'inherit', borderRadius: '2px', padding: '0 2px' }}>
+        {text.slice(start, end + 1)}
+      </mark>
+    );
+    lastIndex = end + 1;
+  });
+
+  if (lastIndex < text.length) {
+    result.push(text.slice(lastIndex));
+  }
+
+  return <>{result}</>;
+};
+
 const SearchPage: React.FC<SearchTemplateProps> = ({
   location,
-  pageContext,
 }) => {
-  const searchIndex = pageContext.searchIndex || [];
+  const [searchIndex, setSearchIndex] = useState<SearchItem[]>([]);
   const [query, setQuery] = useState(getInitialQuery(location));
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
+
+  useEffect(() => {
+    fetch('/search-index.json')
+      .then((res) => res.json())
+      .then((data) => setSearchIndex(data))
+      .catch((err) => console.error('Failed to load search index', err));
+  }, []);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 200);
+    return () => clearTimeout(handler);
+  }, [query]);
 
   const fuse = useMemo(
     () => new Fuse<SearchItem>(searchIndex, fuseOptions),
     [searchIndex],
   );
 
-  const trimmedQuery = query.trim();
+  const trimmedQuery = debouncedQuery.trim();
   const hasSearchQuery = trimmedQuery.length >= MIN_QUERY_LENGTH;
   const hasQuery = query.length > 0;
 
   const results = useMemo(() => {
-    if (!hasSearchQuery) return searchIndex;
-    return fuse.search(trimmedQuery).map((result) => result.item);
+    if (!hasSearchQuery) return searchIndex as unknown as IArticle[];
+    return fuse.search(trimmedQuery).map((result) => {
+      const item = { ...result.item };
+      item.title = highlightMatches(item.title as string, result.matches, 'title');
+      item.excerpt = highlightMatches(item.excerpt as string, result.matches, 'excerpt');
+      return item;
+    }) as unknown as IArticle[];
   }, [fuse, hasSearchQuery, searchIndex, trimmedQuery]);
 
   return (
@@ -121,7 +167,7 @@ const SearchPage: React.FC<SearchTemplateProps> = ({
         </ResultsMeta>
 
         {results.length > 0 ? (
-          <ArticlesList articles={results as any} alwaysShowAllDetails />
+          <ArticlesList articles={results} alwaysShowAllDetails />
         ) : (
           <EmptyState>
             <EmptyTitle>No articles found</EmptyTitle>
