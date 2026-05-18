@@ -47,20 +47,7 @@ function getUniqueListBy(array, key) {
 
 const byDate = (a, b) => new Date(b.dateForSEO) - new Date(a.dateForSEO);
 
-function normalizePath(pathname) {
-  return (
-    `/${pathname || ''}`.replaceAll(/\/\/+/g, '/').replace(/\/$/, '') || '/'
-  );
-}
-
-function buildSearchPath(searchPath, basePath) {
-  if (searchPath) return normalizePath(searchPath);
-
-  const normalizedBasePath = normalizePath(basePath || '/');
-  return normalizedBasePath === '/'
-    ? '/search'
-    : normalizePath(`${normalizedBasePath}/search`);
-}
+const { buildSearchPath } = require('../utils/search');
 
 function normalizeSearchText(value = '') {
   return String(value || '')
@@ -79,22 +66,25 @@ function buildSearchIndex(articles) {
     id: article.id,
     title: article.title,
     slug: article.slug,
+    hero: {
+      regular: article.hero && article.hero.regular,
+      narrow: article.hero && article.hero.narrow,
+    },
     excerpt: normalizeSearchText(article.excerpt),
     author: article.author || '',
     categories: article.categories || [],
     date: article.date,
     timeToRead: article.timeToRead,
-    hero: {
-      regular: article.hero && article.hero.regular,
-      narrow: article.hero && article.hero.narrow,
-    },
     body: normalizeSearchText(article.body).slice(0, 8000),
   }));
 }
 
 // ///////////////////////////////////////////////////////
 
-module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
+module.exports = async (
+  { actions: { createPage }, graphql, store },
+  themeOptions,
+) => {
   const {
     rootPath,
     basePath = '/',
@@ -244,7 +234,7 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
   if (search) {
     log('Creating', 'search page');
     const searchIndex = buildSearchIndex(articlesThatArentSecret);
-    const publicPath = path.join(process.cwd(), 'public');
+    const publicPath = path.join(store.getState().program.directory, 'public');
     if (!fs.existsSync(publicPath)) {
       fs.mkdirSync(publicPath, { recursive: true });
     }

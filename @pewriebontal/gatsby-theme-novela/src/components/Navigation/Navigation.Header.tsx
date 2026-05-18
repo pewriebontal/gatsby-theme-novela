@@ -13,6 +13,7 @@ import {
   getWindowDimensions,
   getBreakpointFromTheme,
 } from '@utils';
+import { buildSearchPath } from '../../gatsby/utils/search';
 
 const siteQuery = graphql`
   {
@@ -27,17 +28,12 @@ const siteQuery = graphql`
   }
 `;
 
-function normalizePath(pathname: string) {
-  return `/${pathname || ''}`.replace(/\/\/+/g, '/').replace(/\/$/, '') || '/';
-}
-
-function buildSearchPath(searchPath: string, basePath: string) {
-  if (searchPath) return normalizePath(searchPath);
-
-  const normalizedBasePath = normalizePath(basePath || '/');
-  return normalizedBasePath === '/'
-    ? '/search'
-    : normalizePath(`${normalizedBasePath}/search`);
+function isTextEntryElement(element: Element | null) {
+  return (
+    element instanceof HTMLInputElement ||
+    element instanceof HTMLTextAreaElement ||
+    (element instanceof HTMLElement && element.isContentEditable)
+  );
 }
 
 const DarkModeToggle: React.FC<{}> = () => {
@@ -121,7 +117,7 @@ const NavigationHeader: React.FC<{}> = () => {
   const [colorMode] = useColorMode();
   const fill = colorMode === 'dark' ? '#fff' : '#000';
   const { rootPath, basePath, search, searchPath } = sitePlugin.pluginOptions;
-  const resolvedSearchPath = buildSearchPath(searchPath, rootPath || basePath);
+  const resolvedSearchPath = buildSearchPath(searchPath, basePath);
 
   useEffect(() => {
     const { width } = getWindowDimensions();
@@ -145,8 +141,16 @@ const NavigationHeader: React.FC<{}> = () => {
 
     const handleKeyDown = (event: KeyboardEvent) => {
       const isSearchPage = window.location.pathname === resolvedSearchPath;
+      const activeElement = document.activeElement;
+      const isSearchInput =
+        activeElement instanceof HTMLInputElement &&
+        activeElement.dataset.searchInput === 'true';
 
       if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+        if (isTextEntryElement(activeElement) && !isSearchInput) {
+          return;
+        }
+
         event.preventDefault();
         if (isSearchPage) {
           navigate(previousPath || '/');
@@ -155,8 +159,7 @@ const NavigationHeader: React.FC<{}> = () => {
         }
       }
 
-      if (event.key === 'Escape' && isSearchPage) {
-        event.preventDefault();
+      if (event.key === 'Escape' && isSearchPage && isSearchInput) {
         navigate(previousPath || '/');
       }
     };

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from '@emotion/styled';
+import { withPrefix } from 'gatsby';
 import Fuse from 'fuse.js';
 
 import Headings from '@components/Headings';
@@ -34,12 +35,14 @@ interface SearchTemplateProps {
 }
 
 const MIN_QUERY_LENGTH = 2;
+const MIN_MATCH_CHAR_LENGTH = 2;
+const FUSE_THRESHOLD = 0.28;
 
 const fuseOptions = {
   includeScore: true,
   ignoreLocation: true,
-  minMatchCharLength: MIN_QUERY_LENGTH,
-  threshold: 0.35,
+  minMatchCharLength: MIN_MATCH_CHAR_LENGTH,
+  threshold: FUSE_THRESHOLD,
   includeMatches: true,
   keys: [
     { name: 'title', weight: 0.4 },
@@ -55,21 +58,90 @@ function getInitialQuery(location: Location) {
   return new URLSearchParams(location.search).get('q') || '';
 }
 
-const highlightMatches = (text: string, matches: readonly Fuse.FuseResultMatch[] = [], key: string) => {
+function normalizeComparableText(value: string | React.ReactNode | string[]) {
+  if (Array.isArray(value)) return value.join(' ').toLowerCase();
+  if (typeof value === 'string') return value.toLowerCase();
+  return '';
+}
+
+function getRank(item: SearchItem, query: string) {
+  const normalizedQuery = query.toLowerCase();
+  const queryTokens = normalizedQuery
+    .split(/\s+/)
+    .filter((token) => token.length >= MIN_QUERY_LENGTH);
+  const title = normalizeComparableText(item.title);
+  const excerpt = normalizeComparableText(item.excerpt);
+  const author = normalizeComparableText(item.author);
+  const categories = normalizeComparableText(item.categories);
+  const body = normalizeComparableText(item.body);
+
+  const allTokensMatch = (value: string) =>
+    queryTokens.length > 0 &&
+    queryTokens.every((token) => value.includes(token));
+  const tokenHits = [title, excerpt, author, categories, body].reduce(
+    (count, value) =>
+      count + queryTokens.filter((token) => value.includes(token)).length,
+    0,
+  );
+
+  if (title === normalizedQuery) return { rank: 0, tokenHits };
+  if (title.startsWith(normalizedQuery)) return { rank: 1, tokenHits };
+  if (title.includes(normalizedQuery)) return { rank: 2, tokenHits };
+  if (
+    excerpt.includes(normalizedQuery) ||
+    categories.includes(normalizedQuery) ||
+    author.includes(normalizedQuery)
+  ) {
+    return { rank: 3, tokenHits };
+  }
+  if (allTokensMatch(title)) return { rank: 4, tokenHits };
+  if (
+    allTokensMatch(excerpt) ||
+    allTokensMatch(categories) ||
+    allTokensMatch(author)
+  ) {
+    return { rank: 5, tokenHits };
+  }
+  if (body.includes(normalizedQuery) || allTokensMatch(body)) {
+    return { rank: 6, tokenHits };
+  }
+
+  return { rank: 7, tokenHits };
+}
+
+const highlightMatches = (
+  text: string,
+  matches: readonly Fuse.FuseResultMatch[] = [],
+  key: string,
+) => {
   const match = matches.find((m) => m.key === key);
   if (!match || !match.indices || match.indices.length === 0) return text;
+
+  const sortedIndices = [...match.indices].sort((a, b) => a[0] - b[0]);
+  const mergedIndices: [number, number][] = [];
+
+  sortedIndices.forEach(([start, end]) => {
+    if (mergedIndices.length === 0) {
+      mergedIndices.push([start, end]);
+      return;
+    }
+    const last = mergedIndices[mergedIndices.length - 1];
+    if (start <= last[1] + 1) {
+      last[1] = Math.max(last[1], end);
+    } else {
+      mergedIndices.push([start, end]);
+    }
+  });
 
   let result: React.ReactNode[] = [];
   let lastIndex = 0;
 
-  match.indices.forEach(([start, end], i) => {
+  mergedIndices.forEach(([start, end], i) => {
     if (start > lastIndex) {
       result.push(text.slice(lastIndex, start));
     }
     result.push(
-      <mark key={`${key}-${i}`} style={{ backgroundColor: 'rgba(255, 225, 0, 0.4)', color: 'inherit', borderRadius: '2px', padding: '0 2px' }}>
-        {text.slice(start, end + 1)}
-      </mark>
+      <StyledMark key={`${key}-${i}`}>{text.slice(start, end + 1)}</StyledMark>,
     );
     lastIndex = end + 1;
   });
@@ -81,15 +153,13 @@ const highlightMatches = (text: string, matches: readonly Fuse.FuseResultMatch[]
   return <>{result}</>;
 };
 
-const SearchPage: React.FC<SearchTemplateProps> = ({
-  location,
-}) => {
+const SearchPage: React.FC<SearchTemplateProps> = ({ location }) => {
   const [searchIndex, setSearchIndex] = useState<SearchItem[]>([]);
   const [query, setQuery] = useState(getInitialQuery(location));
   const [debouncedQuery, setDebouncedQuery] = useState(query);
 
   useEffect(() => {
-    fetch('/search-index.json')
+    fetch(withPrefix('/search-index.json'))
       .then((res) => res.json())
       .then((data) => setSearchIndex(data))
       .catch((err) => console.error('Failed to load search index', err));
@@ -112,13 +182,37 @@ const SearchPage: React.FC<SearchTemplateProps> = ({
   const hasQuery = query.length > 0;
 
   const results = useMemo(() => {
-    if (!hasSearchQuery) return searchIndex as unknown as IArticle[];
-    return fuse.search(trimmedQuery).map((result) => {
-      const item = { ...result.item };
-      item.title = highlightMatches(item.title as string, result.matches, 'title');
-      item.excerpt = highlightMatches(item.excerpt as string, result.matches, 'excerpt');
-      return item;
-    }) as unknown as IArticle[];
+    if (!hasSearchQuery)
+      return searchIndex.slice(0, 10) as unknown as IArticle[];
+    return fuse
+      .search(trimmedQuery)
+      .map((result) => ({
+        ...result,
+        searchRank: getRank(result.item, trimmedQuery),
+      }))
+      .sort((a, b) => {
+        if (a.searchRank.rank !== b.searchRank.rank) {
+          return a.searchRank.rank - b.searchRank.rank;
+        }
+        if (a.searchRank.tokenHits !== b.searchRank.tokenHits) {
+          return b.searchRank.tokenHits - a.searchRank.tokenHits;
+        }
+        return (a.score || 0) - (b.score || 0);
+      })
+      .map((result) => {
+        const item = { ...result.item };
+        item.title = highlightMatches(
+          item.title as string,
+          result.matches,
+          'title',
+        );
+        item.excerpt = highlightMatches(
+          item.excerpt as string,
+          result.matches,
+          'excerpt',
+        );
+        return item;
+      }) as unknown as IArticle[];
   }, [fuse, hasSearchQuery, searchIndex, trimmedQuery]);
 
   return (
@@ -136,6 +230,7 @@ const SearchPage: React.FC<SearchTemplateProps> = ({
               aria-label="Search archive"
               autoComplete="off"
               autoFocus
+              data-search-input="true"
               name="q"
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search the archive"
@@ -171,7 +266,9 @@ const SearchPage: React.FC<SearchTemplateProps> = ({
         ) : (
           <EmptyState>
             <EmptyTitle>No articles found</EmptyTitle>
-            <EmptyText>{trimmedQuery}</EmptyText>
+            {trimmedQuery ? (
+              <EmptyText>No results for "{trimmedQuery}"</EmptyText>
+            ) : null}
           </EmptyState>
         )}
       </Section>
@@ -325,4 +422,11 @@ const EmptyText = styled.p`
   color: ${(p) => p.theme.colors.grey};
   font-size: 16px;
   line-height: 1.6;
+`;
+
+const StyledMark = styled.mark`
+  background-color: ${(p) => p.theme.colors.accent};
+  color: ${(p) => p.theme.colors.background};
+  border-radius: 2px;
+  padding: 0 2px;
 `;
