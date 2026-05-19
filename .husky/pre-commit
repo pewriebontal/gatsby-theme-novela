@@ -1,1 +1,2 @@
+node scripts/prettier-staged.mjs
 npm run lint
