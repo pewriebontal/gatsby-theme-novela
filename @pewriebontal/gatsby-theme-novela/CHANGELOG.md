@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.20.0](https://github.com/pewriebontal/gatsby-theme-novela/compare/@pewriebontal/gatsby-theme-novela@0.19.0...@pewriebontal/gatsby-theme-novela@0.20.0) (2026-05-19)
+
+### Bug Fixes
+
+- **articles:** improve category layout on mobile cards ([753f28a](https://github.com/pewriebontal/gatsby-theme-novela/commit/753f28af628afc18dc53dbd17bf69271d55b72b6))
+- move Category.Hero.tsx to new package directory ([2297c99](https://github.com/pewriebontal/gatsby-theme-novela/commit/2297c9981793107cf441573d84890bbe03201ccf))
+- **nav:** sync header icon colors with theme ([0783289](https://github.com/pewriebontal/gatsby-theme-novela/commit/0783289cc93374274139a6cb634c0d193a4e6c21))
+- **search:** improve result ranking and path handling ([4ac167e](https://github.com/pewriebontal/gatsby-theme-novela/commit/4ac167e1fee08ea9456ea5db796c5ce97ee7345e))
+
+### Features
+
+- add client-side search functionality ([7db5216](https://github.com/pewriebontal/gatsby-theme-novela/commit/7db52163f26a6124fd27c0a43ac0ddf6afe3470f))
+- **articles:** display categories in article list items ([ec05c01](https://github.com/pewriebontal/gatsby-theme-novela/commit/ec05c01cdcb1ce83e852c577b5108c7e2bc032fd))
+- implement category pills UI in Article Hero ([ff38875](https://github.com/pewriebontal/gatsby-theme-novela/commit/ff38875e0463cebd2e5162a8666cd3af0d1db44f))
+- **search:** implement async loading, debounce, and highlighting ([17e9ea8](https://github.com/pewriebontal/gatsby-theme-novela/commit/17e9ea8b72f1ebb683b28bd30e37344c084ce6cc))
+
 # [0.19.0](https://github.com/pewriebontal/gatsby-theme-novela/compare/@pewriebontal/gatsby-theme-novela@0.18.24...@pewriebontal/gatsby-theme-novela@0.19.0) (2026-05-05)
 
 ### Bug Fixes

@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/pewriebontal/gatsby-theme-novela/compare/www@1.7.0...www@1.8.0) (2026-05-19)
+
+
+### Features
+
+* add client-side search functionality ([7db5216](https://github.com/pewriebontal/gatsby-theme-novela/commit/7db52163f26a6124fd27c0a43ac0ddf6afe3470f))
+* add individual category pages ([8fd4b98](https://github.com/pewriebontal/gatsby-theme-novela/commit/8fd4b98b6cda27c67a3ab9cbbc6c0a8bd2554487))
+* add pagination to local category pages ([b83b64b](https://github.com/pewriebontal/gatsby-theme-novela/commit/b83b64b31530f20e00e3e581636bc4f45bddeb5c))
+* **blog:** add category to all blog posts ([2cf6a7f](https://github.com/pewriebontal/gatsby-theme-novela/commit/2cf6a7fcaeccb333024bcf3dbea4484cd37420ab))
+* **blog:** change category to categories ([f14f1aa](https://github.com/pewriebontal/gatsby-theme-novela/commit/f14f1aab59b9145936de8239d6e848ad97a16350))
+
+
+
+
+
 # [1.7.0](https://github.com/pewriebontal/gatsby-theme-novela/compare/www@1.6.22...www@1.7.0) (2026-05-05)
 
 
