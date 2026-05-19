@@ -5,7 +5,7 @@
 This project uses [NPM Workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces) so you can run the Novela locally with an example site.
 
 ```sh
-  git clone git@github.com:narative/gatsby-theme-novela.git
+  git clone git@github.com:pewriebontal/gatsby-theme-novela.git
 
   cd gatsby-theme-novela
 
@@ -15,12 +15,12 @@ This project uses [NPM Workspaces](https://docs.npmjs.com/cli/v7/using-npm/works
 Once you've downloaded the repository and installed all the dependencies you can run the project locally.
 
 ```sh
-  npm run start
+  npm run dev
 ```
 
 #### Adding features and modifying the theme
 
-Before making any large changes to Novela please create an issue to discuss the change or a draft PR. Our aim is to keep this project simple to use without too much configuration.
+Before making any large changes to Novela please create an issue to discuss the change or a draft PR. The aim of this maintained fork is to keep Novela simple to use without too much configuration.
 
 We also deeply value design so any new feature must pass our design review.
 

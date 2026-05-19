@@ -1,8 +1,8 @@
-# Novela — A Gatsby theme by Narative
+# Novela — A maintained Gatsby theme fork
 
 With minimal styling and maximum features — including multiple homepage layouts, built-in social sharing and dark mode — Novela makes it easy to start publishing beautiful articles and stories with Gatsby.
 
-Novela was built by the team at [Narative](https://www.narative.co), and built for everyone that loves the web.
+Novela was originally built by the team at [Narative](https://www.narative.co), and built for everyone that loves the web. This fork continues maintenance under the `@pewriebontal/gatsby-theme-novela` package.
 
 Special thanks to [@narative](https://github.com/narative) for this awesome project and
 [@jpvalery](https://github.com/jpvalery) for helping maintain Novela.
@@ -18,7 +18,7 @@ Special thanks to [@narative](https://github.com/narative) for this awesome proj
 
 ## Maintenance
 
-We have stopped maintainig this project. There will be occassional PR reviews and merges of significant errors but do not expect any changes or responses to support questions in the future. Thank you to everyone that has contributed and continues to use and learn from Novela.
+This fork is actively maintained for compatibility fixes, bug fixes, and focused improvements that keep Novela usable for Gatsby sites. The original Narative project is no longer actively maintained by Narative; please open issues and pull requests against this fork.
 
 
 ## Why use Novela?
@@ -67,4 +67,4 @@ Navigable by cursor or keyboard, readable via screens and screen readers, Novela
 
 # The Future
 
-This project is archived and only bug fixes will be made.
+Novela remains a Gatsby theme for long-form publishing. The maintenance goal is to keep the theme stable, modernize carefully where needed, and preserve the original editorial feel that made Novela useful.

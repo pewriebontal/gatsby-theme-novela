@@ -3,7 +3,7 @@ name: CI for PR
 on:
   pull_request:
     branches:
-    - master
+    - release
 
 jobs:
   CI_Workflow:

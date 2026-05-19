@@ -3,7 +3,7 @@ name: Publish with Lerna
 on:
   push:
     branches:
-    - master
+    - release
 
 jobs:
   Publish_Workflow:
