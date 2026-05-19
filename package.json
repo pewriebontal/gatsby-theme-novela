@@ -12,7 +12,7 @@
     "start": "NODE_OPTIONS='--openssl-legacy-provider --no-deprecation' npm run develop --workspace www",
     "bootstrap": "lerna bootstrap",
     "publish": "lerna version && lerna publish",
-    "prepare": "husky"
+    "prepare": "node -e \"if (!process.env.CI) require('child_process').execFileSync('husky', { stdio: 'inherit', shell: true })\""
   },
   "workspaces": [
     "@pewriebontal/gatsby-theme-novela",
