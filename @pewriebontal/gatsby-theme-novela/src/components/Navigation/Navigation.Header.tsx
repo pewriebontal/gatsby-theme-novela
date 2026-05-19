@@ -47,7 +47,6 @@ const DarkModeToggle: React.FC<{}> = () => {
 
   return (
     <IconWrapper
-      isDark={isDark}
       onClick={toggleColorMode}
       data-a11y="false"
       aria-label={isDark ? 'Activate light mode' : 'Activate dark mode'}
@@ -61,9 +60,6 @@ const DarkModeToggle: React.FC<{}> = () => {
 
 const SharePageButton: React.FC<{}> = () => {
   const [hasCopied, setHasCopied] = useState<boolean>(false);
-  const [colorMode] = useColorMode();
-  const isDark = colorMode === `dark`;
-  const fill = isDark ? '#fff' : '#000';
 
   function copyToClipboardOnClick() {
     if (hasCopied) return;
@@ -78,25 +74,18 @@ const SharePageButton: React.FC<{}> = () => {
 
   return (
     <IconWrapper
-      isDark={isDark}
       onClick={copyToClipboardOnClick}
       data-a11y="false"
       aria-label="Copy URL to clipboard"
       title="Copy URL to clipboard"
     >
-      <Icons.Link fill={fill} />
-      <ToolTip isDark={isDark} hasCopied={hasCopied}>
-        Copied
-      </ToolTip>
+      <Icons.Link fill="currentColor" />
+      <ToolTip hasCopied={hasCopied}>Copied</ToolTip>
     </IconWrapper>
   );
 };
 
 const SearchPageLink: React.FC<{ to: string }> = ({ to }) => {
-  const [colorMode] = useColorMode();
-  const isDark = colorMode === 'dark';
-  const fill = isDark ? '#fff' : '#000';
-
   return (
     <IconLink
       to={to}
@@ -104,7 +93,7 @@ const SearchPageLink: React.FC<{ to: string }> = ({ to }) => {
       aria-label="Search articles"
       title="Search articles"
     >
-      <Icons.Search fill={fill} />
+      <Icons.Search fill="currentColor" />
     </IconLink>
   );
 };
@@ -114,8 +103,6 @@ const NavigationHeader: React.FC<{}> = () => {
   const [previousPath, setPreviousPath] = useState<string>('/');
   const { sitePlugin } = useStaticQuery(siteQuery);
 
-  const [colorMode] = useColorMode();
-  const fill = colorMode === 'dark' ? '#fff' : '#000';
   const { rootPath, basePath, search, searchPath } = sitePlugin.pluginOptions;
   const resolvedSearchPath = buildSearchPath(searchPath, basePath);
 
@@ -180,21 +167,21 @@ const NavigationHeader: React.FC<{}> = () => {
         >
           {showBackArrow && (
             <BackArrowIconContainer>
-              <Icons.ChevronLeft fill={fill} />
+              <Icons.ChevronLeft fill="currentColor" />
             </BackArrowIconContainer>
           )}
-          <Logo fill={fill} />
+          <Logo fill="currentColor" />
           <Hidden>Navigate back to the homepage</Hidden>
         </LogoLink>
         <NavControls>
           {showBackArrow ? (
-            <button
+            <IconWrapper
               onClick={() => navigate(previousPath)}
               title="Navigate back to the homepage"
               aria-label="Navigate back to the homepage"
             >
-              <Icons.Ex fill={fill} />
-            </button>
+              <Icons.Ex fill="currentColor" />
+            </IconWrapper>
           ) : (
             <>
               {search !== false && <SearchPageLink to={resolvedSearchPath} />}
@@ -248,6 +235,8 @@ const LogoLink = styled(Link)<{ back: string }>`
   display: flex;
   align-items: center;
   left: ${(p) => (p.back === 'true' ? '-54px' : 0)};
+  color: ${(p) => p.theme.colors.primary};
+  transition: ${(p) => p.theme.colorModeTransition};
 
   ${mediaqueries.desktop_medium`
     left: 0
@@ -282,17 +271,18 @@ const NavControls = styled.div`
   `}
 `;
 
-const ToolTip = styled.div<{ isDark: boolean; hasCopied: boolean }>`
+const ToolTip = styled.div<{ hasCopied: boolean }>`
   position: absolute;
   padding: 4px 13px;
-  background: ${(p) => (p.isDark ? '#000' : 'rgba(0,0,0,0.1)')};
-  color: ${(p) => (p.isDark ? '#fff' : '#000')};
+  background: ${(p) => p.theme.colors.primary};
+  color: ${(p) => p.theme.colors.background};
   border-radius: 5px;
   font-size: 14px;
   top: -35px;
   opacity: ${(p) => (p.hasCopied ? 1 : 0)};
   transform: ${(p) => (p.hasCopied ? 'translateY(-3px)' : 'none')};
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition: ${(p) => p.theme.colorModeTransition}, transform 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
 
   &::after {
     content: '';
@@ -305,20 +295,25 @@ const ToolTip = styled.div<{ isDark: boolean; hasCopied: boolean }>`
     height: 0;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 6px solid ${(p) => (p.isDark ? '#000' : 'rgba(0,0,0,0.1)')};
+    border-top: 6px solid ${(p) => p.theme.colors.primary};
   }
 `;
 
-const IconWrapper = styled.button<{ isDark: boolean }>`
+const IconWrapper = styled.button`
   opacity: 0.5;
   position: relative;
+  padding: 0;
+  border: 0;
   border-radius: 5px;
   width: 40px;
   height: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.3s ease;
+  color: ${(p) => p.theme.colors.primary};
+  background: transparent;
+  cursor: pointer;
+  transition: ${(p) => p.theme.colorModeTransition}, opacity 0.3s ease;
   margin-left: 30px;
 
   &:hover {
@@ -358,7 +353,8 @@ const IconLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.3s ease;
+  color: ${(p) => p.theme.colors.primary};
+  transition: ${(p) => p.theme.colorModeTransition}, opacity 0.3s ease;
   margin-left: 30px;
 
   &:hover {
