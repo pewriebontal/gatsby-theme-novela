@@ -110,7 +110,7 @@ const ListItem: React.FC<ArticlesListItemProps> = ({ article, narrow }) => {
         <ImageContainer narrow={narrow} gridLayout={gridLayout}>
           {hasHeroImage ? <Image src={imageSource} /> : <ImagePlaceholder />}
         </ImageContainer>
-        <div>
+        <Content>
           {article.categories && article.categories.length > 0 && (
             <CategoryLine>
               {article.categories.slice(0, 2).map((category) => (
@@ -131,7 +131,7 @@ const ListItem: React.FC<ArticlesListItemProps> = ({ article, narrow }) => {
           <MetaData>
             {article.date} · {article.timeToRead} min read
           </MetaData>
-        </div>
+        </Content>
       </Item>
     </ArticleLink>
   );
@@ -289,6 +289,12 @@ const ImageContainer = styled.div<{ narrow: boolean; gridLayout: string }>`
   `}
 `;
 
+const Content = styled.div`
+  ${mediaqueries.phablet`
+    padding: 28px 20px 30px;
+  `}
+`;
+
 const Title = styled(Headings.h2)`
   font-size: 21px;
   font-family: ${(p) => p.theme.fonts.serif};
@@ -307,7 +313,7 @@ const Title = styled(Headings.h2)`
 
   ${mediaqueries.phablet`
     font-size: 22px;  
-    padding: 30px 20px 0;
+    padding: 0;
     margin-bottom: 10px;
     -webkit-line-clamp: 3;
   `}
@@ -336,7 +342,7 @@ const Excerpt = styled.p<{
 
   ${mediaqueries.phablet`
     max-width: 100%;
-    padding:  0 20px;
+    padding:  0;
     margin-bottom: 20px;
     -webkit-line-clamp: 3;
   `}
@@ -350,7 +356,7 @@ const MetaData = styled.div`
 
   ${mediaqueries.phablet`
     max-width: 100%;
-    padding:  0 20px 30px;
+    padding:  0;
   `}
 `;
 
@@ -404,16 +410,28 @@ const ArticleLink = styled(Link)`
 const CategoryLine = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
+  align-items: center;
+  gap: 6px 10px;
+  margin-bottom: 14px;
+
+  ${mediaqueries.phablet`
+    margin-bottom: 12px;
+  `}
 `;
 
 const CategoryName = styled.span`
   color: ${(p) => p.theme.colors.grey};
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.1em;
-  line-height: 1.4;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   text-transform: uppercase;
-  opacity: 0.55;
+  opacity: 0.6;
+
+  ${mediaqueries.phablet`
+    font-size: 11px;
+    letter-spacing: 0.075em;
+  `}
 `;
