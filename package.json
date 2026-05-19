@@ -6,12 +6,13 @@
   "license": "MIT",
   "scripts": {
     "build": "NODE_OPTIONS=--openssl-legacy-provider npm run build --workspace www",
+    "clean": "npm run clean --workspace www",
     "dev": "npm run start",
     "lint": "eslint --ignore-path .gitignore .",
     "start": "NODE_OPTIONS='--openssl-legacy-provider --no-deprecation' npm run develop --workspace www",
     "bootstrap": "lerna bootstrap",
     "publish": "lerna version && lerna publish",
-    "prepare": "husky"
+    "prepare": "node -e \"if (!process.env.CI) require('child_process').execFileSync('husky', { stdio: 'inherit', shell: true })\""
   },
   "workspaces": [
     "@pewriebontal/gatsby-theme-novela",
