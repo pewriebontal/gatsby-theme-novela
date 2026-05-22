@@ -70,7 +70,7 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "gatsby-plugin-sharp": "^3.15.0",
-    "gatsby-transformer-remark": "^4.12.0"
+    "gatsby-plugin-sharp": "^4.25.1",
+    "gatsby-transformer-remark": "^5.25.1"
   }
 }
