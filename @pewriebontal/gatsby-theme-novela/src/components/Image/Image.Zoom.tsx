@@ -4,22 +4,35 @@ import { useThemeUI } from 'theme-ui';
 
 import 'react-medium-image-zoom/dist/styles.css';
 
-const ImageZoom: React.FC<{}> = props => {
+type ImageZoomProps = React.ImgHTMLAttributes<HTMLImageElement>;
+
+const GATSBY_RESP_IMAGE_CLASS = 'gatsby-resp-image-image';
+
+const hasClassName = (className = '', target: string) =>
+  className.split(/\s+/).includes(target);
+
+const ImageZoom: React.FC<ImageZoomProps> = ({
+  className,
+  style,
+  ...props
+}) => {
   const [isZoomed, setIsZoomed] = useState(false);
   const { theme } = useThemeUI();
 
-  const image = {
-    ...props,
-    className: 'Image__Zoom',
-    style: {
-      display: 'block',
-      margin: '0 auto',
-      width: '100%',
-      borderRadius: isZoomed ? '5px' : '0px',
-    },
+  if (hasClassName(className, GATSBY_RESP_IMAGE_CLASS)) {
+    return <img {...props} className={className} style={style} />;
+  }
+
+  const imageClassName = ['Image__Zoom', className].filter(Boolean).join(' ');
+  const imageStyle = {
+    ...style,
+    display: 'block',
+    margin: '0 auto',
+    width: '100%',
+    borderRadius: isZoomed ? '5px' : '0px',
   };
 
-  const handleZoomChange = useCallback(shouldZoom => {
+  const handleZoomChange = useCallback((shouldZoom) => {
     setIsZoomed(shouldZoom);
   }, []);
 
@@ -30,12 +43,7 @@ const ImageZoom: React.FC<{}> = props => {
       zoomMargin={40}
       overlayBgColorEnd={theme.colors.background}
     >
-      <img
-        className={image.className}
-        src={image.src}
-        alt={image.alt}
-        style={image.style}
-      />
+      <img {...props} className={imageClassName} style={imageStyle} />
     </ControlledZoom>
   );
 };
