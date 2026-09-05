@@ -47,7 +47,7 @@
     "@mdx-js/mdx": "^1.1.0",
     "@mdx-js/react": "^1.0.27",
     "@raae/gatsby-remark-oembed": "^0.1.1",
-    "contentful-cli": "^1.16.0",
+    "contentful-cli": "^4.0.10",
     "fuse.js": "^6.6.2",
     "gatsby": "^4.25.9",
     "gatsby-image": "^3.11.0",
