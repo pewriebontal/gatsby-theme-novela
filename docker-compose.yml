@@ -1,0 +1,26 @@
+services:
+  dev:
+    image: node:20-bookworm
+    working_dir: /app
+    command: sh -c "[ -d node_modules/.bin ] || npm ci; npm run develop --workspace www"
+    ports:
+      - '8000:8000'
+    environment:
+      GATSBY_HOST: 0.0.0.0
+      HUSKY: '0'
+      NODE_OPTIONS: --no-deprecation
+    env_file:
+      - path: www/.env
+        required: false
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+      - www_node_modules:/app/www/node_modules
+      - theme_node_modules:/app/@pewriebontal/gatsby-theme-novela/node_modules
+      - npm_cache:/root/.npm
+
+volumes:
+  node_modules:
+  www_node_modules:
+  theme_node_modules:
+  npm_cache:
