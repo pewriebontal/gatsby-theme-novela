@@ -71,7 +71,7 @@
     "gatsby-remark-smartypants": "^5.25.0",
     "gatsby-remark-typescript": "^0.0.12",
     "gatsby-source-filesystem": "^4.25.0",
-    "gatsby-transformer-remark": "^5.25.1",
+    "gatsby-transformer-remark": "^6.16.0",
     "gatsby-transformer-sharp": "^4.25.0",
     "gatsby-transformer-yaml": "^4.25.0",
     "lodash": "^4.18.1",
